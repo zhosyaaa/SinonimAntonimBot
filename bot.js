@@ -1,6 +1,9 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const express = require('express');
+const app = express();
+const port = 3000;
 
 const token = '6711701677:AAHfJw56QGNi0MNw-gE4YNGNS1ZcfHqLY1M';
 let awaitingSynonymInput = {};
@@ -87,7 +90,6 @@ bot.on('message', async (msg) => {
             delete awaitingAntonymInput[chatId]; 
             try {
                 const antonyms = await getAntonyms(text);
-                console.log(antonyms)
                 if (antonyms.length > 0) {
                     let antonimText = antonyms.map(obj => obj.antonim).join(', ');
                     let antonimArray = antonimText.split(' ');
@@ -117,3 +119,6 @@ bot.onText(/\/start/, (msg) => {
     };
     bot.sendMessage(chatId, 'Выберите действие:', keyboard);
 });
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
